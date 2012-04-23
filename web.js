@@ -13,29 +13,19 @@ app.get('/user/:id', function(request, mainResponse){
 	
 	var http = require('http');
 	var client = http.createClient(80, 'api.twitter.com');
-	console.log('id: ', request.params.id);
 	var request = client.request("GET", "/1/users/profile_image?screen_name="+request.params.id+"&size=bigger", {"host": "api.twitter.com"});
 
 	request.addListener("response", function (response) {
-		console.log('11111');
 		var body = "";
 
         response.addListener("data", function (data) {
-            //body += data;
-			console.log('22222');
+
         });
 
         response.addListener("end", function (end) {
-			console.log('3333333');
+			
 			getProfilePic(response.headers.location, function(x){ 
-				console.log('444444');
-				//mainResponse.write(x);
-				//mainResponse.contentType('application/json');
-				//mainResponse.send('Sorry, cant find that', 404);
-				//mainResponse.json(  { "foo" : "bar" } );
 				mainResponse.json({ img: x });
-				//mainResponse.end();
-				
 			});
         });
 	});
@@ -60,7 +50,6 @@ app.get('/user/:id', function(request, mainResponse){
 		    response.on('end', function () {
 		        var base64 = new Buffer(body, 'binary').toString('base64');
 		        var data = prefix + base64;
-		        //console.log(data);
 				return callback(data);
 		    });
 		    response.on('data', function (chunk) {
